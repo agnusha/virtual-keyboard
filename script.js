@@ -1,10 +1,12 @@
 const Keyboard = {
+
   elements: {
     main: null,
     keysContainer: null,
     keys: [],
     input: null,
   },
+
   selection: {
     start: null,
     end: null,
@@ -23,6 +25,22 @@ const Keyboard = {
     ctrl: false,
   },
 
+  symbols: {
+    keyLayoutEn: [
+      "`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "backspace",
+      "tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]", "\\", "delete",
+      "caps", "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'", "enter",
+      "shift_l", "\\", "z", "x", "c", "v", "b", "n", "m", ".", ",", "/", "▲", "shift_r",
+      "control_l", "win", "alt_l", "space", "alt_r", "control_r", "◄", "▼", "►"
+    ],
+    keyLayoutRu: [
+      "`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "backspace",
+      "tab", "й", "ц", "у", "к", "е", "н", "г", "ш", "щ", "з", "х", "ъ", "\\", "delete",
+      "caps", "ф", "ы", "в", "а", "п", "р", "о", "л", "д", "ж", "э", "enter",
+      "shift_l", "\\", "я", "ч", "с", "м", "и", "т", "ь", "б", "ю", ".", "▲", "shift_r",
+      "control_l", "win", "alt_l", "space", "alt_r", "control_r", "◄", "▼", "►"
+    ]
+  },
 
   setCursor(position) {
     this.elements.input.focus();
@@ -81,6 +99,7 @@ const Keyboard = {
   changeLanguage() {
     localStorage.lang = localStorage.lang != null && localStorage.lang == "en" ? "ru" : "en";
     console.log("change_lang" + localStorage.lang);
+    return localStorage.lang;
   },
 
   isSimple(key) {
@@ -102,7 +121,6 @@ const Keyboard = {
         this._toggleAlt();
         break;
       default:
-        console.log("it is not specific button")
         return false;
     }
     this.elements.input.focus();
@@ -142,23 +160,8 @@ const Keyboard = {
 
   _createKeys() {
     const fragment = document.createDocumentFragment();
-    const keyLayoutEn = [
-      "`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "backspace",
-      "tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]", "\\", "delete",
-      "caps", "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'", "enter",
-      "shift", "\\", "z", "x", "c", "v", "b", "n", "m", ".", ",", "/", "▲", "shift_r",
-      "control", "win", "alt", "space", "alt", "ctrl_r", "◄", "▼", "►"
-    ];
 
-    const keyLayoutRu = [
-      "`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "backspace",
-      "tab", "й", "ц", "у", "к", "е", "н", "г", "ш", "щ", "з", "х", "ъ", "\\", "delete",
-      "caps", "ф", "ы", "в", "а", "п", "р", "о", "л", "д", "ж", "э", "enter",
-      "shift", "\\", "я", "ч", "с", "м", "и", "т", "ь", "б", "ю", ".", "▲", "shift_r",
-      "control", "win", "alt", "space", "alt", "ctrl_r", "◄", "▼", "►"
-    ];
-
-    let keyLayout = Keyboard.getLanguageAfterLoadPage() == "ru" ? keyLayoutRu : keyLayoutEn;
+    let keyLayout = Keyboard.getLanguageAfterLoadPage() == "ru" ? Keyboard.symbols.keyLayoutRu : Keyboard.symbols.keyLayoutEn;
     console.log("язык" + keyLayout);
 
     keyLayout.forEach(key => {
@@ -254,9 +257,8 @@ const Keyboard = {
           });
           break;
 
-        case "shift":
         case "shift_l":
-
+        case "shift_r":
           keyElement.innerHTML = 'Shift';
 
           keyElement.addEventListener("mousedown", () => {
@@ -278,8 +280,31 @@ const Keyboard = {
           });
           break;
 
-        case "control":
-        case "ctrl_r":
+        case "alt_l":
+        case "alt_r":
+          keyElement.innerHTML = 'Alt';
+
+          keyElement.addEventListener("mousedown", () => {
+            console.log(this.properties);
+
+            this._findSpecialButton("Alt");
+            console.log("mousedownalt");
+            console.log(this.properties);
+
+          });
+
+          keyElement.addEventListener("mouseup", () => {
+            console.log(this.properties);
+
+            this._findSpecialButton("alt");
+            console.log("mouseUpalt");
+            console.log(this.properties);
+
+          });
+          break;
+
+        case "control_l":
+        case "control_r":
           keyElement.innerHTML = 'Ctrl';
 
           keyElement.addEventListener("click", () => {
@@ -309,21 +334,31 @@ const Keyboard = {
         fragment.appendChild(document.createElement("br"));
       }
     });
-
     return fragment;
   },
 
   _triggerEvent(handlerName) {
     if (typeof this.eventHandlers[handlerName] == "function") {
-      console.log("triggered" + handlerName);
       this.eventHandlers[handlerName](this.properties.value);
     }
   },
+
   __setButtonUpperCase() {
     for (const key of this.elements.keys) {
       if (key.childElementCount === 0 && Keyboard.isSimple(key.textContent)) {
         key.textContent = (this.properties.capsLock && !this.properties.shift) || (!this.properties.capsLock && this.properties.shift) ? key.textContent.toUpperCase() : key.textContent.toLowerCase();
       }
+    }
+  },
+
+  __setButtonLanguage(lang) {
+    let keyLayout = lang == "ru" ? Keyboard.symbols.keyLayoutRu : Keyboard.symbols.keyLayoutEn;
+    let i = 0;
+    for (const key of this.elements.keys) {
+      if (key.childElementCount === 0 && Keyboard.isSimple(key.textContent)) {
+        key.textContent = (this.properties.capsLock && !this.properties.shift) || (!this.properties.capsLock && this.properties.shift) ? keyLayout[i].toUpperCase() : keyLayout[i].toLowerCase();
+      }
+      i++;
     }
   },
 
@@ -337,20 +372,21 @@ const Keyboard = {
     console.log("_toggleShift");
     this.properties.shift = !this.properties.shift;
     this.__setButtonUpperCase();
+    if (this.properties.shift && this.properties.alt) {
+      this.__setButtonLanguage(this.changeLanguage());
+    }
   },
 
   _toggleAlt() {
     this.properties.alt = !this.properties.alt;
-    if (this.properties.shift) {
-      this.changeLanguage();
-      this.init();
+    if (this.properties.shift && this.properties.alt) {
+      this.__setButtonLanguage(this.changeLanguage());
     }
   },
 
   _toggleCtrl() {
     this.properties.ctrl = !this.properties.ctrl;
   },
-
 
   open(initialValue, oninput, onclose) {
     this.properties.value = initialValue || "";
