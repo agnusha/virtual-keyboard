@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35" width="35" height="35">
+	<defs>
+		<image width="35" height="35" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAMAAAApB0NrAAAAAXNSR0IB2cksfwAAAOFQTFRFAAAAZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZW2JZW2JZW2JZm2JZm2JZW2JZW2JZW2JZW2JZW2JZm2JZm2JZW2JZW2JZm2JZW2JZW2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JZm2JkNa+QgAAAEt0Uk5TAAxXmMjp+CKb77RuORcHIwiIgRUWz6oYJDLlazHnVAls0KmJ6oAyyP+cDRTucatwmm2QMDulVzrr+QZ/JYrRCqgU8LM4BfFYmcn6VeR53gAAAVxJREFUeJyllGlzgjAQhiOCBTQq4oFahZbYBnsopa1nqVatx///QRUBSQI47XQ/LPvuPJNsNlkA+JtluCwv5HICn+UyycSVKMn5AiwWYSEvS2IpTpQVoaJGsloRlDKDlGr1Bp1p1GsalWi22vGl261rQmmdblKF3U60kl4zkhAAjBs9DJV6MgLArRnWixppDERBC8Qemb67xxifVc86ffoS0Rfw8IhJRpX63oeTyWWeMH4eDCItc54f2iTzgrFDanvoef41yjjOG8bvDkGNeM+PiXJwYFFGHXt+Mr3ETCcsE9/LZ8i94jX7e/GjS4xf8+WzG6ez0z1kGb+H9F0wTHAXwOqlMzP/ToGGIEgxiOZBZKa/sY8w0l0jGTHcz3P8izefOjtNSmvugnnUcOHSM3icZRPNlpFczpDJzvLR5uLXyl5XN5vq2l59W/M44Vlmu9ujwwHtd9uUf8v/7AfUACactlmbrQAAAABJRU5ErkJggg=="/>
+	</defs>
+	<style>
+		tspan { white-space:pre }
+	</style>
+	<g id="About Us">
+		<g id="Social Media">
+			<use id="Facebook" href="#img1" x="0" y="0" />
+		</g>
+	</g>
+</svg>
