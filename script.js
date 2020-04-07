@@ -22,10 +22,11 @@ const Keyboard = {
     capsLock: false,
     shift: false,
     alt: false,
-    ctrl: false,
+    ctrl: false
   },
 
   symbols: {
+
     keyLayoutEn: [
       "`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "backspace",
       "tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]", "\\", "delete",
@@ -108,17 +109,20 @@ const Keyboard = {
 
   _findSpecialButton(key, isKeyUp) {
     switch (key) {
-      case "Shift":
-        this._toggleShift();
+      case "ShiftLeft":
+      case "ShiftRight":
+        this._toggleShift(key);
         break;
       case "CapsLock":
         if (!isKeyUp) this._toggleCapsLock();
         break;
-      case "Control":
-        this._toggleCtrl();
+      case "ControlLeft":
+      case "ControlRight":
+        this._toggleCtrl(key, !isKeyUp);
         break;
-      case "Alt":
-        this._toggleAlt();
+      case "AltLeft":
+      case "AltRight":
+        this._toggleAlt(key);
         break;
       default:
         return false;
@@ -129,9 +133,9 @@ const Keyboard = {
 
   _keyUpDownButton(e, isKeyUp) {
     console.log("нажата" + e.key);
-    console.log("элементы");
+    console.log("элементыf[f[f[f[f[f[");
     console.log(this.elements);
-    if (!this._findSpecialButton(e.key, isKeyUp)) {
+    if (!this._findSpecialButton(e.code, isKeyUp)) {
       this.elements.keys.forEach((element) => {
         if (isKeyUp)
           element.classList.remove("active-key");
@@ -148,13 +152,21 @@ const Keyboard = {
               e.preventDefault();
               document.querySelector('#Tab').click();
             }
-            console.log("после нажатия");
-            console.log(this);
             return;
           }
         }
       });
     }
+  },
+  _createMouseUpAndDownEvents(keyElement, key) {
+    keyElement.addEventListener("mousedown", () => {
+      this._findSpecialButton(key, false);
+    });
+
+    keyElement.addEventListener("mouseup", () => {
+      this._findSpecialButton(key, true);
+    });
+
   },
 
 
@@ -258,60 +270,37 @@ const Keyboard = {
           break;
 
         case "shift_l":
-        case "shift_r":
+          keyElement.classList.add("ShiftLeft");
           keyElement.innerHTML = 'Shift';
+          this._createMouseUpAndDownEvents(keyElement, "ShiftLeft");
+          break;
 
-          keyElement.addEventListener("mousedown", () => {
-            console.log(this.properties);
-
-            this._findSpecialButton("Shift");
-            console.log("mousedownShift");
-            console.log(this.properties);
-
-          });
-
-          keyElement.addEventListener("mouseup", () => {
-            console.log(this.properties);
-
-            this._findSpecialButton("Shift");
-            console.log("mouseUpshift");
-            console.log(this.properties);
-
-          });
+        case "shift_r":
+          keyElement.classList.add("ShiftRight");
+          keyElement.innerHTML = 'Shift';
+          this._createMouseUpAndDownEvents(keyElement, "ShiftRight");
           break;
 
         case "alt_l":
-        case "alt_r":
+          keyElement.classList.add("AltLeft");
           keyElement.innerHTML = 'Alt';
-
-          keyElement.addEventListener("mousedown", () => {
-            console.log(this.properties);
-
-            this._findSpecialButton("Alt");
-            console.log("mousedownalt");
-            console.log(this.properties);
-
-          });
-
-          keyElement.addEventListener("mouseup", () => {
-            console.log(this.properties);
-
-            this._findSpecialButton("alt");
-            console.log("mouseUpalt");
-            console.log(this.properties);
-
-          });
+          this._createMouseUpAndDownEvents(keyElement, "AltLeft");
+          break;
+        case "alt_r":
+          keyElement.classList.add("AltRight");
+          keyElement.innerHTML = 'Alt';
+          this._createMouseUpAndDownEvents(keyElement, "AltRight");
           break;
 
         case "control_l":
-        case "control_r":
+          keyElement.classList.add("ControlLeft");
           keyElement.innerHTML = 'Ctrl';
-
-          keyElement.addEventListener("click", () => {
-            this._toggleCtrl();
-            console.log("clickCtrl");
-          });
-
+          this._createMouseUpAndDownEvents(keyElement, "ControlLeft");
+          break;
+        case "control_r":
+          keyElement.classList.add("ControlRight");
+          keyElement.innerHTML = 'Ctrl';
+          this._createMouseUpAndDownEvents(keyElement, "ControlRight");
           break;
 
         default:
@@ -368,24 +357,30 @@ const Keyboard = {
     document.querySelector(".activatable__key").classList.toggle("activatable__key--active", this.properties.capsLock);
   },
 
-  _toggleShift() {
-    console.log("_toggleShift");
+  _toggleShift(code) {
     this.properties.shift = !this.properties.shift;
     this.__setButtonUpperCase();
     if (this.properties.shift && this.properties.alt) {
       this.__setButtonLanguage(this.changeLanguage());
     }
+    document.querySelector("." + code).classList.toggle("active-key", this.properties.shift);
   },
 
-  _toggleAlt() {
+  _toggleAlt(code) {
     this.properties.alt = !this.properties.alt;
     if (this.properties.shift && this.properties.alt) {
       this.__setButtonLanguage(this.changeLanguage());
     }
+    document.querySelector("." + code).classList.toggle("active-key", this.properties.alt);
   },
 
-  _toggleCtrl() {
+  _toggleCtrl(code, addClass) {
     this.properties.ctrl = !this.properties.ctrl;
+    if (addClass)
+      document.querySelector("." + code).classList.add("active-key");
+    else document.querySelector("." + code).classList.remove("active-key");
+
+
   },
 
   open(initialValue, oninput, onclose) {
