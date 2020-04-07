@@ -139,13 +139,6 @@ const Keyboard = {
     }
   },
 
-  _clickKeyButton(key) {
-    console.log("click");
-    console.log(this.properties.value);
-    this.properties.value += (this.properties.capsLock && !this.properties.shift) || (!this.properties.capsLock && this.properties.shift) ? key.toUpperCase() : key.toLowerCase();
-    this._triggerEvent("oninput");
-    this.elements.input.focus();
-  },
 
   _createKeys() {
     const fragment = document.createDocumentFragment();
@@ -233,6 +226,18 @@ const Keyboard = {
           });
           break;
 
+        case "space":
+          keyElement.classList.add("keyboard__key--extra-wide");
+          keyElement.innerHTML = "Space";
+
+          keyElement.addEventListener("click", () => {
+            this.setSelection();
+            this.properties.value = `${this.properties.value.slice(0, this.selection.start)} ${this.properties.value.slice(this.selection.end)}`;
+            this.elements.input.value = this.properties.value;
+            this.setCursor(this.selection.start + 1);
+          });
+          break;
+
         case "win":
           keyElement.innerHTML = 'Win';
           keyElement.addEventListener("click", () => {
@@ -280,20 +285,6 @@ const Keyboard = {
           keyElement.addEventListener("click", () => {
             this._toggleCtrl();
             console.log("clickCtrl");
-
-          });
-
-          break;
-
-
-
-        case "space":
-          keyElement.classList.add("keyboard__key--extra-wide");
-          keyElement.innerHTML = "Space";
-
-          keyElement.addEventListener("click", () => {
-            this.properties.value += " ";
-            this._triggerEvent("oninput");
           });
 
           break;
@@ -303,19 +294,17 @@ const Keyboard = {
           keyElement.setAttribute("defaultKey", true);
 
           keyElement.addEventListener("click", () => {
-            this._clickKeyButton(key);
-            /*
-            console.log("click");
-            console.log(this.properties.value);
-            this.properties.value += this.properties.capsLock ? key.toUpperCase() : key.toLowerCase();
-            this._triggerEvent("oninput");*/
+            const currentLetter = (this.properties.capsLock && !this.properties.shift) || (!this.properties.capsLock && this.properties.shift) ? key.toUpperCase() : key.toLowerCase();
+            this.setSelection();
+            this.properties.value = `${this.properties.value.slice(0, this.selection.start)}${currentLetter}${this.properties.value.slice(this.selection.end)}`;
+            this.elements.input.value = this.properties.value;
+            this.setCursor(this.selection.start + 1);
           });
 
           break;
       }
 
       fragment.appendChild(keyElement);
-
       if (insertLineBreak) {
         fragment.appendChild(document.createElement("br"));
       }
@@ -330,10 +319,6 @@ const Keyboard = {
       this.eventHandlers[handlerName](this.properties.value);
     }
   },
-  _colorBackspace(keyClass) {
-    // document.querySelector("." + keyClass).classList.toggle("active-key");
-  },
-
   __setButtonUpperCase() {
     for (const key of this.elements.keys) {
       if (key.childElementCount === 0 && Keyboard.isSimple(key.textContent)) {
@@ -376,6 +361,4 @@ const Keyboard = {
 
 window.addEventListener("DOMContentLoaded", function () {
   Keyboard.init();
-  //Keyboard.changeLanguage("en");
-  //Keyboard.init();
 });
