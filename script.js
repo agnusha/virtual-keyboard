@@ -172,12 +172,10 @@ const Keyboard = {
       const keyElement = document.createElement("button");
       const insertLineBreak = ["backspace", "delete", "enter", "shift_r", "?"].indexOf(key) !== -1;
 
-      // Add attributes/classes
       keyElement.setAttribute("type", "button");
       keyElement.classList.add("keyboard__key");
 
       switch (key) {
-        //impelement delete not last char
         case "backspace":
           keyElement.classList.add("keyboard__key--wide");
           keyElement.innerHTML = 'Backspace';
@@ -217,11 +215,28 @@ const Keyboard = {
           keyElement.id = 'Tab';
           keyElement.addEventListener("click", () => {
             this.setSelection();
-            //this.properties.value = `${this.properties.value.substring(0, this.selection.start)}\t${this.properties.value.substring(this.selection.end)}`;
             this.properties.value = `${this.properties.value.slice(0, this.selection.start)}\t${this.properties.value.slice(this.selection.end)}`;
-
             this.elements.input.value = this.properties.value;
             this.setCursor(this.selection.start + 1);
+          });
+          break;
+
+        case "enter":
+          keyElement.classList.add("keyboard__key--wide");
+          keyElement.innerHTML = 'ENTER';
+
+          keyElement.addEventListener("click", () => {
+            this.setSelection();
+            this.properties.value = `${this.properties.value.slice(0, this.selection.start)}\n${this.properties.value.slice(this.selection.end)}`;
+            this.elements.input.value = this.properties.value;
+            this.setCursor(this.selection.start + 1);
+          });
+          break;
+
+        case "win":
+          keyElement.innerHTML = 'Win';
+          keyElement.addEventListener("click", () => {
+            alert('System button');
           });
           break;
 
@@ -231,13 +246,6 @@ const Keyboard = {
 
           keyElement.addEventListener("click", () => {
             this._findSpecialButton("CapsLock");
-          });
-          break;
-
-        case "win":
-          keyElement.innerHTML = 'Win';
-          keyElement.addEventListener("click", () => {
-            alert('System button');
           });
           break;
 
@@ -277,18 +285,6 @@ const Keyboard = {
 
           break;
 
-        case "enter":
-          keyElement.classList.add("keyboard__key--wide");
-          keyElement.innerHTML = 'ENTER';
-
-          keyElement.addEventListener("click", () => {
-            //this.elements.input.value = `${this.elements.input.value.substring(0, start)}${this.elements.input.value.substring(end)}`;
-
-            this.properties.value += "\n";
-            this._triggerEvent("oninput");
-          });
-
-          break;
 
 
         case "space":
