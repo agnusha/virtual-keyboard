@@ -18,7 +18,6 @@ const Keyboard = {
   },
 
   properties: {
-    value: "",
     capsLock: false,
     shift: false,
     alt: false,
@@ -132,7 +131,6 @@ const Keyboard = {
   },
 
   setSelection() {
-    this.properties.value = this.elements.input.value;
     this.selection.start = this.elements.input.selectionStart;
     this.selection.end = this.elements.input.selectionEnd;
   },
@@ -209,8 +207,7 @@ const Keyboard = {
 
   _insertSymbolInSelection(symbol) {
     this.setSelection();
-    this.properties.value = `${this.properties.value.slice(0, this.selection.start)}${symbol}${this.properties.value.slice(this.selection.end)}`;
-    this.elements.input.value = this.properties.value;
+    this.elements.input.value = `${this.elements.input.value.slice(0, this.selection.start)}${symbol}${this.elements.input.value.slice(this.selection.end)}`;
     this.setCursor(this.selection.start + 1);
   },
 
@@ -234,14 +231,11 @@ const Keyboard = {
           keyElement.addEventListener("click", () => {
             this.setSelection();
             if (this.selection.start !== this.selection.end) {
-              this.properties.value = `${this.properties.value.slice(0, this.selection.start)}${this.properties.value.slice(this.selection.end)}`;
+              this.elements.input.value = `${this.elements.input.value.slice(0, this.selection.start)}${this.elements.input.value.slice(this.selection.end)}`;
             } else if (this.selection.start !== 0) {
-              this.properties.value = `${this.properties.value.slice(0, this.selection.start - 1)}${this.properties.value.slice(this.selection.start)}`;
+              this.elements.input.value = `${this.elements.input.value.slice(0, this.selection.start - 1)}${this.elements.input.value.slice(this.selection.start)}`;
               --this.selection.start;
-            } else {
-              this.setCursor(this.selection.start);
             }
-            this.elements.input.value = this.properties.value;
             this.setCursor(this.selection.start);
           });
 
@@ -252,11 +246,10 @@ const Keyboard = {
           keyElement.addEventListener("click", () => {
             this.setSelection();
             if (this.selection.start !== this.selection.end) {
-              this.properties.value = `${this.properties.value.slice(0, this.selection.start)}${this.properties.value.slice(this.selection.end)}`;
-            } else if (this.selection.end !== this.properties.value.length) {
-              this.properties.value = `${this.properties.value.slice(0, this.selection.start)}${this.properties.value.slice(this.selection.start + 1)}`;
+              this.elements.input.value = `${this.elements.input.value.slice(0, this.selection.start)}${this.elements.input.value.slice(this.selection.end)}`;
+            } else if (this.selection.end !== this.elements.input.value.length) {
+              this.elements.input.value = `${this.elements.input.value.slice(0, this.selection.start)}${this.elements.input.value.slice(this.selection.start + 1)}`;
             }
-            this.elements.input.value = this.properties.value;
             this.setCursor(this.selection.start);
           });
           break;
@@ -342,13 +335,12 @@ const Keyboard = {
 
           this._addSpecialKeysAttribute(keyElement, key);
 
-          keyElement.addEventListener("click", (e) => {
+          keyElement.addEventListener("click", () => {
             const currentLetter = keyElement.getAttribute("keyWithShift") && this.properties.shift ? Keyboard.getSpecialSymbolsSet()[key] :
               (this.properties.capsLock && !this.properties.shift) || (!this.properties.capsLock && this.properties.shift) ?
               key.toUpperCase() : key.toLowerCase();
             this.setSelection();
-            this.properties.value = `${this.properties.value.slice(0, this.selection.start)}${currentLetter}${this.properties.value.slice(this.selection.end)}`;
-            this.elements.input.value = this.properties.value;
+            this.elements.input.value = `${this.elements.input.value.slice(0, this.selection.start)}${currentLetter}${this.elements.input.value.slice(this.selection.end)}`;
             this.setCursor(this.selection.start + 1);
           });
           break;
@@ -446,11 +438,11 @@ const Keyboard = {
 
   _triggerEvent(handlerName) {
     if (typeof this.eventHandlers[handlerName] == "function") {
-      this.eventHandlers[handlerName](this.properties.value);
+      this.eventHandlers[handlerName](this.elements.input.value);
     }
   },
   open(initialValue, oninput, onclose) {
-    this.properties.value = initialValue || "";
+    this.elements.input.value = initialValue || "";
     this.eventHandlers.oninput = oninput;
     this.eventHandlers.onclose = onclose;
   },
