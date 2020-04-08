@@ -40,7 +40,47 @@ const Keyboard = {
       "caps", "ф", "ы", "в", "а", "п", "р", "о", "л", "д", "ж", "э", "enter",
       "shift_l", "\\", "я", "ч", "с", "м", "и", "т", "ь", "б", "ю", ".", "▲", "shift_r",
       "control_l", "win", "alt_l", "space", "alt_r", "control_r", "◄", "▼", "►"
-    ]
+    ],
+    specialSymbolsRu: {
+      "`": "~",
+      "1": "!",
+      "2": "\"",
+      "3": "№",
+      "4": ";",
+      "5": "%",
+      "6": ":",
+      "7": "?",
+      "8": "*",
+      "9": "(",
+      "0": ")",
+      "-": "_",
+      "=": "+",
+      "\\": "/",
+      ".": ",",
+    },
+    specialSymbolsEn: {
+      "`": "~",
+      "1": "!",
+      "2": "@",
+      "3": "#",
+      "4": "$",
+      "5": "%",
+      "6": "^",
+      "7": "&",
+      "8": "*",
+      "9": "(",
+      "0": ")",
+      "-": "_",
+      "=": "+",
+      "[": "{",
+      "]": "}",
+      "\\": "|",
+      ";": ":",
+      "'": "\"",
+      ",": "<",
+      ".": ">",
+      "/": "?",
+    }
   },
 
   setCursor(position) {
@@ -49,9 +89,7 @@ const Keyboard = {
     this.elements.input.selectionEnd = position;
   },
 
-  init() {
-    console.log("init");
-
+  _createElementsHtml() {
     const paragraph = document.createElement("p");
     paragraph.textContent = "Написано в ОС Windows.";
 
@@ -68,22 +106,24 @@ const Keyboard = {
     document.body.appendChild(paragraph);
     document.body.appendChild(this.elements.input);
     document.body.appendChild(this.elements.main);
+  },
 
-    this.elements.input.addEventListener("focus", () => {
-      this.open(this.elements.input.value, currentValue => {
-        this.elements.input.value = currentValue;
-      });
-    });
-
+  init() {
+    this._createElementsHtml();
     this.elements.input.focus();
     addEventListener("keyup", function (e) {
+      e.preventDefault();
       Keyboard._keyUpDownButton(e, true);
     });
 
     addEventListener("keydown", function (e) {
+      e.preventDefault();
       Keyboard._keyUpDownButton(e, false);
-      if (this != null & this.elements != null) this.elements.input.focus();
     });
+  },
+
+  getSpecialSymbolsSet() {
+    return localStorage.lang != null && localStorage.lang == "en" ? this.symbols.specialSymbolsEn : this.symbols.specialSymbolsRu;
   },
 
   getLanguageAfterLoadPage() {
@@ -99,31 +139,33 @@ const Keyboard = {
 
   changeLanguage() {
     localStorage.lang = localStorage.lang != null && localStorage.lang == "en" ? "ru" : "en";
-    console.log("change_lang" + localStorage.lang);
     return localStorage.lang;
   },
 
   isSimple(key) {
-
     return (key.length === 1)
   },
 
-  _findSpecialButton(key, isKeyUp) {
+  _findSpecialButton(key, isKeyUp, e) {
     switch (key) {
       case "ArrowUp":
-        this._toggleArrow("▲", isKeyUp);
+        this._toggleElemByContent("▲", isKeyUp);
         break;
 
       case "ArrowDown":
-        this._toggleArrow("▼", isKeyUp);
+        this._toggleElemByContent("▼", isKeyUp);
         break;
 
       case "ArrowLeft":
-        this._toggleArrow("◄", isKeyUp);
+        this._toggleElemByContent("◄", isKeyUp);
         break;
 
       case "ArrowRight":
-        this._toggleArrow("►", isKeyUp);
+        this._toggleElemByContent("►", isKeyUp);
+        break;
+      case "Tab":
+        this._toggleElemByContent("Tab", isKeyUp, true);
+        e.preventDefault();
         break;
 
       case "ShiftLeft":
@@ -145,36 +187,15 @@ const Keyboard = {
       default:
         return false;
     }
-    this.elements.input.focus();
     return true;
   },
 
   _keyUpDownButton(e, isKeyUp) {
-    console.log("нажата" + e.key);
-    console.log(this.elements);
-    if (!this._findSpecialButton(e.code, isKeyUp)) {
-      this.elements.keys.forEach((element) => {
-        if (isKeyUp)
-          element.classList.remove("active-key");
-        else {
-          if (e.key.toLowerCase() === element.textContent.toLowerCase()) {
-
-            //simple number or letter
-            element.classList.add("active-key");
-            if (element.getAttribute("defaultKey"))
-              this.properties.value += (this.properties.capsLock && !this.properties.shift) || (!this.properties.capsLock && this.properties.shift) ? e.key.toUpperCase() : e.key.toLowerCase();
-            //this.elements.input.value = this.properties.value;
-
-            if (e.key === 'Tab') {
-              e.preventDefault();
-              document.querySelector('#Tab').click();
-            }
-            return;
-          }
-        }
-      });
+    if (!this._findSpecialButton(e.code, isKeyUp, e)) {
+      this._toggleElemByContent(e.key, isKeyUp, true);
     }
   },
+
   _createMouseUpAndDownEvents(keyElement, key) {
     keyElement.addEventListener("mousedown", () => {
       this._findSpecialButton(key, false);
@@ -186,12 +207,17 @@ const Keyboard = {
 
   },
 
+  _insertSymbolInSelection(symbol) {
+    this.setSelection();
+    this.properties.value = `${this.properties.value.slice(0, this.selection.start)}${symbol}${this.properties.value.slice(this.selection.end)}`;
+    this.elements.input.value = this.properties.value;
+    this.setCursor(this.selection.start + 1);
+  },
 
   _createKeys() {
     const fragment = document.createDocumentFragment();
 
     let keyLayout = Keyboard.getLanguageAfterLoadPage() == "ru" ? Keyboard.symbols.keyLayoutRu : Keyboard.symbols.keyLayoutEn;
-    console.log("язык" + keyLayout);
 
     keyLayout.forEach(key => {
       const keyElement = document.createElement("button");
@@ -237,12 +263,8 @@ const Keyboard = {
 
         case "tab":
           keyElement.innerHTML = 'Tab';
-          keyElement.id = 'Tab';
           keyElement.addEventListener("click", () => {
-            this.setSelection();
-            this.properties.value = `${this.properties.value.slice(0, this.selection.start)}\t${this.properties.value.slice(this.selection.end)}`;
-            this.elements.input.value = this.properties.value;
-            this.setCursor(this.selection.start + 1);
+            this._insertSymbolInSelection("\t");
           });
           break;
 
@@ -251,10 +273,7 @@ const Keyboard = {
           keyElement.innerHTML = 'ENTER';
 
           keyElement.addEventListener("click", () => {
-            this.setSelection();
-            this.properties.value = `${this.properties.value.slice(0, this.selection.start)}\n${this.properties.value.slice(this.selection.end)}`;
-            this.elements.input.value = this.properties.value;
-            this.setCursor(this.selection.start + 1);
+            this._insertSymbolInSelection("\n");
           });
           break;
 
@@ -263,10 +282,7 @@ const Keyboard = {
           keyElement.innerHTML = "Space";
 
           keyElement.addEventListener("click", () => {
-            this.setSelection();
-            this.properties.value = `${this.properties.value.slice(0, this.selection.start)} ${this.properties.value.slice(this.selection.end)}`;
-            this.elements.input.value = this.properties.value;
-            this.setCursor(this.selection.start + 1);
+            this._insertSymbolInSelection(" ");
           });
           break;
 
@@ -324,8 +340,12 @@ const Keyboard = {
           keyElement.textContent = key.toLowerCase();
           keyElement.setAttribute("defaultKey", true);
 
-          keyElement.addEventListener("click", () => {
-            const currentLetter = (this.properties.capsLock && !this.properties.shift) || (!this.properties.capsLock && this.properties.shift) ? key.toUpperCase() : key.toLowerCase();
+          this._addSpecialKeysAttribute(keyElement, key);
+
+          keyElement.addEventListener("click", (e) => {
+            const currentLetter = keyElement.getAttribute("keyWithShift") && this.properties.shift ? Keyboard.getSpecialSymbolsSet()[key] :
+              (this.properties.capsLock && !this.properties.shift) || (!this.properties.capsLock && this.properties.shift) ?
+              key.toUpperCase() : key.toLowerCase();
             this.setSelection();
             this.properties.value = `${this.properties.value.slice(0, this.selection.start)}${currentLetter}${this.properties.value.slice(this.selection.end)}`;
             this.elements.input.value = this.properties.value;
@@ -342,17 +362,22 @@ const Keyboard = {
     return fragment;
   },
 
-  _triggerEvent(handlerName) {
-    if (typeof this.eventHandlers[handlerName] == "function") {
-      this.eventHandlers[handlerName](this.properties.value);
+  _addSpecialKeysAttribute(keyElement, key) {
+    if (Keyboard.getSpecialSymbolsSet()[key]) {
+      keyElement.setAttribute("keyWithoutShift", key);
+      keyElement.setAttribute("keyWithShift", Keyboard.getSpecialSymbolsSet()[key]);
     }
   },
-
-  __setButtonUpperCase() {
+  __setButtonUpperCase(shift) {
     for (const key of this.elements.keys) {
+      let currentSymbol = key.getAttribute("keyWithShift") ?
+        (shift ? key.getAttribute("keyWithShift") : key.getAttribute("keyWithoutShift")) : key.textContent;
+
       if (key.childElementCount === 0 && Keyboard.isSimple(key.textContent)) {
-        key.textContent = (this.properties.capsLock && !this.properties.shift) || (!this.properties.capsLock && this.properties.shift) ? key.textContent.toUpperCase() : key.textContent.toLowerCase();
+        key.textContent = (this.properties.capsLock && !this.properties.shift) || (!this.properties.capsLock && this.properties.shift) ?
+          currentSymbol.toUpperCase() : currentSymbol.toLowerCase();
       }
+
     }
   },
 
@@ -365,13 +390,27 @@ const Keyboard = {
       }
       i++;
     }
+    Keyboard.changeSpecialSymbolsAttributes();
   },
 
-  _toggleArrow(key, isKeyUp) {
-    let arrow = Array.from(document.querySelectorAll('button')).filter(el => el.textContent == key)[0];
-    if (isKeyUp)
-      arrow.classList.remove("active-key");
-    else arrow.classList.add("active-key");
+  changeSpecialSymbolsAttributes() {
+    for (const key of this.elements.keys) {
+      if (key.getAttribute("keyWithShift")) {
+        Keyboard._addSpecialKeysAttribute(key, key.textContent)
+      }
+    }
+  },
+  _toggleElemByContent(key, isKeyUp, isClick) {
+    let elem = Array.from(document.querySelectorAll('button')).filter(el =>
+      (Keyboard.getSpecialSymbolsSet()[key] == el.textContent.toLowerCase() && this.properties.shift) || el.textContent.toLowerCase() == key.toLowerCase())[0];
+    if (elem != null) {
+      if (isKeyUp) {
+        if (isClick || this.properties.shift) elem.click();
+        elem.classList.remove("active-key");
+      } else
+        elem.classList.add("active-key");
+    }
+
   },
   _toggleCapsLock() {
     this.properties.capsLock = !this.properties.capsLock;
@@ -381,7 +420,7 @@ const Keyboard = {
 
   _toggleShift(code) {
     this.properties.shift = !this.properties.shift;
-    this.__setButtonUpperCase();
+    this.__setButtonUpperCase(this.properties.shift);
     if (this.properties.shift && this.properties.alt) {
       this.__setButtonLanguage(this.changeLanguage());
     }
@@ -405,6 +444,11 @@ const Keyboard = {
 
   },
 
+  _triggerEvent(handlerName) {
+    if (typeof this.eventHandlers[handlerName] == "function") {
+      this.eventHandlers[handlerName](this.properties.value);
+    }
+  },
   open(initialValue, oninput, onclose) {
     this.properties.value = initialValue || "";
     this.eventHandlers.oninput = oninput;
