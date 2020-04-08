@@ -104,15 +104,33 @@ const Keyboard = {
   },
 
   isSimple(key) {
+
     return (key.length === 1)
   },
 
   _findSpecialButton(key, isKeyUp) {
     switch (key) {
+      case "ArrowUp":
+        this._toggleArrow("▲", isKeyUp);
+        break;
+
+      case "ArrowDown":
+        this._toggleArrow("▼", isKeyUp);
+        break;
+
+      case "ArrowLeft":
+        this._toggleArrow("◄", isKeyUp);
+        break;
+
+      case "ArrowRight":
+        this._toggleArrow("►", isKeyUp);
+        break;
+
       case "ShiftLeft":
       case "ShiftRight":
         this._toggleShift(key);
         break;
+
       case "CapsLock":
         if (!isKeyUp) this._toggleCapsLock();
         break;
@@ -133,7 +151,6 @@ const Keyboard = {
 
   _keyUpDownButton(e, isKeyUp) {
     console.log("нажата" + e.key);
-    console.log("элементыf[f[f[f[f[f[");
     console.log(this.elements);
     if (!this._findSpecialButton(e.code, isKeyUp)) {
       this.elements.keys.forEach((element) => {
@@ -314,7 +331,6 @@ const Keyboard = {
             this.elements.input.value = this.properties.value;
             this.setCursor(this.selection.start + 1);
           });
-
           break;
       }
 
@@ -351,6 +367,12 @@ const Keyboard = {
     }
   },
 
+  _toggleArrow(key, isKeyUp) {
+    let arrow = Array.from(document.querySelectorAll('button')).filter(el => el.textContent == key)[0];
+    if (isKeyUp)
+      arrow.classList.remove("active-key");
+    else arrow.classList.add("active-key");
+  },
   _toggleCapsLock() {
     this.properties.capsLock = !this.properties.capsLock;
     this.__setButtonUpperCase();
