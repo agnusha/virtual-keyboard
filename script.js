@@ -27,58 +27,58 @@ const Keyboard = {
   symbols: {
 
     keyLayoutEn: [
-      "`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "backspace",
-      "tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]", "\\", "delete",
-      "caps", "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'", "enter",
-      "shift_l", "\\", "z", "x", "c", "v", "b", "n", "m", ".", ",", "/", "▲", "shift_r",
-      "control_l", "win", "alt_l", "space", "alt_r", "control_r", "◄", "▼", "►"
+      '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'backspace',
+      'tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\', 'delete',
+      'caps', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '"', 'enter',
+      'shift_l', '\\', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '.', ',', '/', '▲', 'shift_r',
+      'control_l', 'win', 'alt_l', 'space', 'alt_r', 'control_r', '◄', '▼', '►'
     ],
     keyLayoutRu: [
-      "`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "backspace",
-      "tab", "й", "ц", "у", "к", "е", "н", "г", "ш", "щ", "з", "х", "ъ", "\\", "delete",
-      "caps", "ф", "ы", "в", "а", "п", "р", "о", "л", "д", "ж", "э", "enter",
-      "shift_l", "\\", "я", "ч", "с", "м", "и", "т", "ь", "б", "ю", ".", "▲", "shift_r",
-      "control_l", "win", "alt_l", "space", "alt_r", "control_r", "◄", "▼", "►"
+      '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'backspace',
+      'tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\', 'delete',
+      'caps', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'enter',
+      'shift_l', '\\', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.', '▲', 'shift_r',
+      'control_l', 'win', 'alt_l', 'space', 'alt_r', 'control_r', '◄', '▼', '►'
     ],
     specialSymbolsRu: {
-      "`": "~",
-      "1": "!",
-      "2": "\"",
-      "3": "№",
-      "4": ";",
-      "5": "%",
-      "6": ":",
-      "7": "?",
-      "8": "*",
-      "9": "(",
-      "0": ")",
-      "-": "_",
-      "=": "+",
-      "\\": "/",
-      ".": ",",
+      '`': '~',
+      '1': '!',
+      '2': '\'',
+      '3': '№',
+      '4': ';',
+      '5': '%',
+      '6': ':',
+      '7': '?',
+      '8': '*',
+      '9': '(',
+      '0': ')',
+      '-': '_',
+      '=': '+',
+      '\\': '/',
+      '.': ',',
     },
     specialSymbolsEn: {
-      "`": "~",
-      "1": "!",
-      "2": "@",
-      "3": "#",
-      "4": "$",
-      "5": "%",
-      "6": "^",
-      "7": "&",
-      "8": "*",
-      "9": "(",
-      "0": ")",
-      "-": "_",
-      "=": "+",
-      "[": "{",
-      "]": "}",
-      "\\": "|",
-      ";": ":",
-      "'": "\"",
-      ",": "<",
-      ".": ">",
-      "/": "?",
+      '`': '~',
+      '1': '!',
+      '2': '@',
+      '3': '#',
+      '4': '$',
+      '5': '%',
+      '6': '^',
+      '7': '&',
+      '8': '*',
+      '9': '(',
+      '0': ')',
+      '-': '_',
+      '=': '+',
+      '[': '{',
+      ']': '}',
+      '\\': '|',
+      ';': ':',
+      '"': '\'',
+      ',': '<',
+      '.': '>',
+      '/': '?',
     }
   },
 
@@ -89,18 +89,18 @@ const Keyboard = {
   },
 
   _createElementsHtml() {
-    const paragraph = document.createElement("p");
-    paragraph.textContent = "Написано в ОС Windows.";
+    const paragraph = document.createElement('p');
+    paragraph.textContent = 'Написано в ОС Windows.';
 
-    this.elements.input = document.createElement("textarea");
-    this.elements.input.classList.add("use-keyboard-input");
+    this.elements.input = document.createElement('textarea');
+    this.elements.input.classList.add('use-keyboard-input');
 
-    this.elements.main = document.createElement("div");
-    this.elements.keysContainer = document.createElement("div");
-    this.elements.main.classList.add("keyboard");
-    this.elements.keysContainer.classList.add("keyboard__keys");
+    this.elements.main = document.createElement('div');
+    this.elements.keysContainer = document.createElement('div');
+    this.elements.main.classList.add('keyboard');
+    this.elements.keysContainer.classList.add('keyboard__keys');
     this.elements.keysContainer.appendChild(this._createKeys());
-    this.elements.keys = this.elements.keysContainer.querySelectorAll(".keyboard__key");
+    this.elements.keys = this.elements.keysContainer.querySelectorAll('.keyboard__key');
     this.elements.main.appendChild(this.elements.keysContainer);
     document.body.appendChild(paragraph);
     document.body.appendChild(this.elements.input);
@@ -110,24 +110,24 @@ const Keyboard = {
   init() {
     this._createElementsHtml();
     this.elements.input.focus();
-    addEventListener("keyup", function (e) {
+    addEventListener('keyup', function (e) {
       e.preventDefault();
       Keyboard._keyUpDownButton(e, true);
     });
 
-    addEventListener("keydown", function (e) {
+    addEventListener('keydown', function (e) {
       e.preventDefault();
       Keyboard._keyUpDownButton(e, false);
     });
   },
 
   getSpecialSymbolsSet() {
-    return localStorage.lang != null && localStorage.lang == "en" ? this.symbols.specialSymbolsEn : this.symbols.specialSymbolsRu;
+    return localStorage.lang != null && localStorage.lang == 'en' ? this.symbols.specialSymbolsEn : this.symbols.specialSymbolsRu;
   },
 
   getLanguageAfterLoadPage() {
     const langUserInterface = (navigator.language || navigator.systemLanguage || navigator.userLanguage).substr(0, 2).toLowerCase();
-    return localStorage.lang != null ? localStorage.lang : langUserInterface;
+    return (localStorage.lang != null ? localStorage.lang : langUserInterface) == 'ru' ? Keyboard.symbols.keyLayoutRu : Keyboard.symbols.keyLayoutEn;
   },
 
   setSelection() {
@@ -136,7 +136,7 @@ const Keyboard = {
   },
 
   changeLanguage() {
-    localStorage.lang = localStorage.lang != null && localStorage.lang == "en" ? "ru" : "en";
+    localStorage.lang = localStorage.lang != null && localStorage.lang == 'en' ? 'ru' : 'en';
     return localStorage.lang;
   },
 
@@ -146,40 +146,40 @@ const Keyboard = {
 
   _findSpecialButton(key, isKeyUp, e) {
     switch (key) {
-      case "ArrowUp":
-        this._toggleElemByContent("▲", isKeyUp);
+      case 'ArrowUp':
+        this._toggleElemByContent('▲', isKeyUp, true);
         break;
 
-      case "ArrowDown":
-        this._toggleElemByContent("▼", isKeyUp);
+      case 'ArrowDown':
+        this._toggleElemByContent('▼', isKeyUp, true);
         break;
 
-      case "ArrowLeft":
-        this._toggleElemByContent("◄", isKeyUp);
+      case 'ArrowLeft':
+        this._toggleElemByContent('◄', isKeyUp, true);
         break;
 
-      case "ArrowRight":
-        this._toggleElemByContent("►", isKeyUp);
+      case 'ArrowRight':
+        this._toggleElemByContent('►', isKeyUp, true);
         break;
-      case "Tab":
-        this._toggleElemByContent("Tab", isKeyUp, true);
+      case 'Tab':
+        this._toggleElemByContent('Tab', isKeyUp, true);
         e.preventDefault();
         break;
 
-      case "ShiftLeft":
-      case "ShiftRight":
+      case 'ShiftLeft':
+      case 'ShiftRight':
         this._toggleShift(key);
         break;
 
-      case "CapsLock":
+      case 'CapsLock':
         if (!isKeyUp) this._toggleCapsLock();
         break;
-      case "ControlLeft":
-      case "ControlRight":
+      case 'ControlLeft':
+      case 'ControlRight':
         this._toggleCtrl(key, !isKeyUp);
         break;
-      case "AltLeft":
-      case "AltRight":
+      case 'AltLeft':
+      case 'AltRight':
         this._toggleAlt(key);
         break;
       default:
@@ -195,14 +195,20 @@ const Keyboard = {
   },
 
   _createMouseUpAndDownEvents(keyElement, key) {
-    keyElement.addEventListener("mousedown", () => {
+    keyElement.addEventListener('mousedown', () => {
       this._findSpecialButton(key, false);
     });
 
-    keyElement.addEventListener("mouseup", () => {
+    keyElement.addEventListener('mouseup', () => {
       this._findSpecialButton(key, true);
     });
 
+  },
+
+  _createKeyElement(keyElement, className, text, eventName) {
+    keyElement.classList.add(className);
+    keyElement.innerHTML = text;
+    if (eventName != null) this._createMouseUpAndDownEvents(keyElement, eventName);
   },
 
   _insertSymbolInSelection(symbol) {
@@ -213,22 +219,19 @@ const Keyboard = {
 
   _createKeys() {
     const fragment = document.createDocumentFragment();
-
-    let keyLayout = Keyboard.getLanguageAfterLoadPage() == "ru" ? Keyboard.symbols.keyLayoutRu : Keyboard.symbols.keyLayoutEn;
+    let keyLayout = Keyboard.getLanguageAfterLoadPage();
 
     keyLayout.forEach(key => {
-      const keyElement = document.createElement("button");
-      const insertLineBreak = ["backspace", "delete", "enter", "shift_r", "?"].indexOf(key) !== -1;
+      const keyElement = document.createElement('button');
+      const insertLineBreak = ['backspace', 'delete', 'enter', 'shift_r', '?'].indexOf(key) !== -1;
 
-      keyElement.setAttribute("type", "button");
-      keyElement.classList.add("keyboard__key");
+      keyElement.setAttribute('type', 'button');
+      keyElement.classList.add('keyboard__key');
 
       switch (key) {
-        case "backspace":
-          keyElement.classList.add("keyboard__key--wide");
-          keyElement.innerHTML = 'Backspace';
-
-          keyElement.addEventListener("click", () => {
+        case 'backspace':
+          this._createKeyElement(keyElement, 'keyboard__key--wide', 'Backspace');
+          keyElement.addEventListener('click', () => {
             this.setSelection();
             if (this.selection.start !== this.selection.end) {
               this.elements.input.value = `${this.elements.input.value.slice(0, this.selection.start)}${this.elements.input.value.slice(this.selection.end)}`;
@@ -241,9 +244,9 @@ const Keyboard = {
 
           break;
 
-        case "delete":
+        case 'delete':
           keyElement.innerHTML = 'Delete';
-          keyElement.addEventListener("click", () => {
+          keyElement.addEventListener('click', () => {
             this.setSelection();
             if (this.selection.start !== this.selection.end) {
               this.elements.input.value = `${this.elements.input.value.slice(0, this.selection.start)}${this.elements.input.value.slice(this.selection.end)}`;
@@ -254,89 +257,72 @@ const Keyboard = {
           });
           break;
 
-        case "tab":
-          keyElement.innerHTML = 'Tab';
-          keyElement.addEventListener("click", () => {
-            this._insertSymbolInSelection("\t");
+        case 'tab':
+          this._createKeyElement(keyElement, null, 'Tab');
+          keyElement.addEventListener('click', () => {
+            this._insertSymbolInSelection('\t');
           });
           break;
 
-        case "enter":
-          keyElement.classList.add("keyboard__key--wide");
-          keyElement.innerHTML = 'ENTER';
-
-          keyElement.addEventListener("click", () => {
-            this._insertSymbolInSelection("\n");
+        case 'enter':
+          this._createKeyElement(keyElement, 'keyboard__key--wide', 'ENTER');
+          keyElement.addEventListener('click', () => {
+            this._insertSymbolInSelection('\n');
           });
           break;
 
-        case "space":
-          keyElement.classList.add("keyboard__key--extra-wide");
-          keyElement.innerHTML = "Space";
-
-          keyElement.addEventListener("click", () => {
-            this._insertSymbolInSelection(" ");
+        case 'space':
+          this._createKeyElement(keyElement, 'keyboard__key--extra-wide', 'Space');
+          keyElement.addEventListener('click', () => {
+            this._insertSymbolInSelection(' ');
           });
           break;
 
-        case "win":
+        case 'win':
           keyElement.innerHTML = 'Win';
-          keyElement.addEventListener("click", () => {
+          keyElement.addEventListener('click', () => {
             alert('System button');
           });
           break;
 
-        case "caps":
-          keyElement.classList.add("keyboard__key--wide", "activatable__key");
+        case 'caps':
+          keyElement.classList.add('keyboard__key--wide', 'activatable__key');
           keyElement.innerHTML = 'Caps Lock';
 
-          keyElement.addEventListener("click", () => {
-            this._findSpecialButton("CapsLock");
+          keyElement.addEventListener('click', () => {
+            this._findSpecialButton('CapsLock');
           });
           break;
 
-        case "shift_l":
-          keyElement.classList.add("ShiftLeft");
-          keyElement.innerHTML = 'Shift';
-          this._createMouseUpAndDownEvents(keyElement, "ShiftLeft");
+        case 'shift_l':
+          this._createKeyElement(keyElement, 'ShiftLeft', 'Shift', 'ShiftLeft');
           break;
 
-        case "shift_r":
-          keyElement.classList.add("ShiftRight");
-          keyElement.innerHTML = 'Shift';
-          this._createMouseUpAndDownEvents(keyElement, "ShiftRight");
+        case 'shift_r':
+          this._createKeyElement(keyElement, 'ShiftRight', 'Shift', 'ShiftRight');
           break;
 
-        case "alt_l":
-          keyElement.classList.add("AltLeft");
-          keyElement.innerHTML = 'Alt';
-          this._createMouseUpAndDownEvents(keyElement, "AltLeft");
-          break;
-        case "alt_r":
-          keyElement.classList.add("AltRight");
-          keyElement.innerHTML = 'Alt';
-          this._createMouseUpAndDownEvents(keyElement, "AltRight");
+        case 'alt_l':
+          this._createKeyElement(keyElement, 'AltLeft', 'Alt', 'AltLeft');
           break;
 
-        case "control_l":
-          keyElement.classList.add("ControlLeft");
-          keyElement.innerHTML = 'Ctrl';
-          this._createMouseUpAndDownEvents(keyElement, "ControlLeft");
+        case 'alt_r':
+          this._createKeyElement(keyElement, 'AltRight', 'Alt', 'AltRight');
           break;
-        case "control_r":
-          keyElement.classList.add("ControlRight");
-          keyElement.innerHTML = 'Ctrl';
-          this._createMouseUpAndDownEvents(keyElement, "ControlRight");
+
+        case 'control_l':
+          this._createKeyElement(keyElement, 'ControlLeft', 'Ctrl', 'ControlLeft');
+          break;
+
+        case 'control_r':
+          this._createKeyElement(keyElement, 'ControlRight', 'Ctrl', 'ControlRight');
           break;
 
         default:
           keyElement.textContent = key.toLowerCase();
-          keyElement.setAttribute("defaultKey", true);
-
           this._addSpecialKeysAttribute(keyElement, key);
-
-          keyElement.addEventListener("click", () => {
-            const currentLetter = keyElement.getAttribute("keyWithShift") && this.properties.shift ? Keyboard.getSpecialSymbolsSet()[key] :
+          keyElement.addEventListener('click', () => {
+            const currentLetter = keyElement.getAttribute('keyWithShift') && this.properties.shift ? Keyboard.getSpecialSymbolsSet()[key] :
               (this.properties.capsLock && !this.properties.shift) || (!this.properties.capsLock && this.properties.shift) ?
               key.toUpperCase() : key.toLowerCase();
             this.setSelection();
@@ -348,7 +334,7 @@ const Keyboard = {
 
       fragment.appendChild(keyElement);
       if (insertLineBreak) {
-        fragment.appendChild(document.createElement("br"));
+        fragment.appendChild(document.createElement('br'));
       }
     });
     return fragment;
@@ -356,25 +342,24 @@ const Keyboard = {
 
   _addSpecialKeysAttribute(keyElement, key) {
     if (Keyboard.getSpecialSymbolsSet()[key]) {
-      keyElement.setAttribute("keyWithoutShift", key);
-      keyElement.setAttribute("keyWithShift", Keyboard.getSpecialSymbolsSet()[key]);
+      keyElement.setAttribute('keyWithoutShift', key);
+      keyElement.setAttribute('keyWithShift', Keyboard.getSpecialSymbolsSet()[key]);
     }
   },
   __setButtonUpperCase(shift) {
     for (const key of this.elements.keys) {
-      let currentSymbol = key.getAttribute("keyWithShift") ?
-        (shift ? key.getAttribute("keyWithShift") : key.getAttribute("keyWithoutShift")) : key.textContent;
+      let currentSymbol = key.getAttribute('keyWithShift') ?
+        (shift ? key.getAttribute('keyWithShift') : key.getAttribute('keyWithoutShift')) : key.textContent;
 
       if (key.childElementCount === 0 && Keyboard.isSimple(key.textContent)) {
         key.textContent = (this.properties.capsLock && !this.properties.shift) || (!this.properties.capsLock && this.properties.shift) ?
           currentSymbol.toUpperCase() : currentSymbol.toLowerCase();
       }
-
     }
   },
 
   __setButtonLanguage(lang) {
-    let keyLayout = lang == "ru" ? Keyboard.symbols.keyLayoutRu : Keyboard.symbols.keyLayoutEn;
+    let keyLayout = lang == 'ru' ? Keyboard.symbols.keyLayoutRu : Keyboard.symbols.keyLayoutEn;
     let i = 0;
     for (const key of this.elements.keys) {
       if (key.childElementCount === 0 && Keyboard.isSimple(key.textContent)) {
@@ -387,27 +372,28 @@ const Keyboard = {
 
   changeSpecialSymbolsAttributes() {
     for (const key of this.elements.keys) {
-      if (key.getAttribute("keyWithShift")) {
+      if (key.getAttribute('keyWithShift')) {
         Keyboard._addSpecialKeysAttribute(key, key.textContent)
       }
     }
   },
+
   _toggleElemByContent(key, isKeyUp, isClick) {
     let elem = Array.from(document.querySelectorAll('button')).filter(el =>
       (Keyboard.getSpecialSymbolsSet()[key] == el.textContent.toLowerCase() && this.properties.shift) || el.textContent.toLowerCase() == key.toLowerCase())[0];
     if (elem != null) {
       if (isKeyUp) {
         if (isClick || this.properties.shift) elem.click();
-        elem.classList.remove("active-key");
+        elem.classList.remove('active-key');
       } else
-        elem.classList.add("active-key");
+        elem.classList.add('active-key');
     }
 
   },
   _toggleCapsLock() {
     this.properties.capsLock = !this.properties.capsLock;
     this.__setButtonUpperCase();
-    document.querySelector(".activatable__key").classList.toggle("activatable__key--active", this.properties.capsLock);
+    document.querySelector('.activatable__key').classList.toggle('activatable__key--active', this.properties.capsLock);
   },
 
   _toggleShift(code) {
@@ -416,7 +402,7 @@ const Keyboard = {
     if (this.properties.shift && this.properties.alt) {
       this.__setButtonLanguage(this.changeLanguage());
     }
-    document.querySelector("." + code).classList.toggle("active-key", this.properties.shift);
+    document.querySelector('.' + code).classList.toggle('active-key', this.properties.shift);
   },
 
   _toggleAlt(code) {
@@ -424,30 +410,30 @@ const Keyboard = {
     if (this.properties.shift && this.properties.alt) {
       this.__setButtonLanguage(this.changeLanguage());
     }
-    document.querySelector("." + code).classList.toggle("active-key", this.properties.alt);
+    document.querySelector('.' + code).classList.toggle('active-key', this.properties.alt);
   },
 
   _toggleCtrl(code, addClass) {
     this.properties.ctrl = !this.properties.ctrl;
     if (addClass)
-      document.querySelector("." + code).classList.add("active-key");
-    else document.querySelector("." + code).classList.remove("active-key");
+      document.querySelector('.' + code).classList.add('active-key');
+    else document.querySelector('.' + code).classList.remove('active-key');
 
 
   },
 
   _triggerEvent(handlerName) {
-    if (typeof this.eventHandlers[handlerName] == "function") {
+    if (typeof this.eventHandlers[handlerName] == 'function') {
       this.eventHandlers[handlerName](this.elements.input.value);
     }
   },
   open(initialValue, oninput, onclose) {
-    this.elements.input.value = initialValue || "";
+    this.elements.input.value = initialValue || '';
     this.eventHandlers.oninput = oninput;
     this.eventHandlers.onclose = onclose;
   },
 };
 
-window.addEventListener("DOMContentLoaded", function () {
+window.addEventListener('DOMContentLoaded', function () {
   Keyboard.init();
 });
